@@ -21,8 +21,21 @@ app.post("/buy-asset", (req, res) => {
     })
 })
 
-app.listen(3000);
+app.post("/sell-asset", (req, res) => {      
+    const quantity = req.body.quantity;
+    const updatedETHquantity = ETH_BALANCE + quantity;
+    const updatedUSDCbalance = ETH_BALANCE * USDC_BALANCE / updatedETHquantity;
+    const gotUSDC = USDC_BALANCE - updatedUSDCbalance;
+    
+    ETH_BALANCE = updatedETHquantity;
+    USDC_BALANCE = updatedUSDCbalance;
 
-// app.post("/sell-asset", (req, res) => {      
-//     }
-// )
+    res.json({
+        message: `You got ${gotUSDC} USDC for ${quantity} ETH`
+    })
+
+  }
+)
+
+
+app.listen(3000);
